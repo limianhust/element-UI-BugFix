@@ -38,7 +38,7 @@
           type="info"
           @close="deleteTag($event, item)"
           disable-transitions>
-          <span class="el-select__tags-text">{{ item.currentLabel }}</span>
+          <span class="el-select__tags-text">{{ item.value[labelKey] }}</span>
         </el-tag>
       </transition-group>
 
@@ -249,6 +249,10 @@
     directives: { Clickoutside },
 
     props: {
+      labelKey: {
+        type: String,
+        default: 'userName'
+      },
       name: String,
       id: String,
       value: {
@@ -526,7 +530,7 @@
         }
         if (option) return option;
         const label = (!isObject && !isNull && !isUndefined)
-          ? value : '';
+          ? value : value[this.labelKey];
         let newOption = {
           value: value,
           currentLabel: label
@@ -869,8 +873,7 @@
           small: 32,
           mini: 28
         };
-        const input = reference.$el.querySelector('input');
-        this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
+        this.initialInputHeight = reference.$el.getBoundingClientRect().height || sizeMap[this.selectSize];
       }
       if (this.remote && this.multiple) {
         this.resetInputHeight();
